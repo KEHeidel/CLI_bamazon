@@ -35,7 +35,34 @@ var connection = mysql.createConnection({
             table.push([res[i].item_id, res[i].product_name, res[i].department_name, "$" + res[i].price, res[i].stock_quantity]);
           }
           console.log(table.toString() + "\n");
+          makePurchase();
         });
-        connection.end();
-      }
+        // connection.end();
+}
   
+function makePurchase() {
+  connection.query("SELECT * FROM products", function(err, results) {
+    if (err) throw err;
+  inquirer
+    .prompt([
+      {
+      name: "purchase",
+      type: "input",
+      message: "Which item would you like to purchase?",
+      choices: function() {
+        var itemArray = [];
+        for (var i = 0; i < results.length; i++) {
+          itemArray.push(results[i].item_id);
+        }
+        return itemArray;
+      }
+    },
+    {
+      name: "number",
+      type: "input",
+      message: "How many items would you like to purchase?"
+    }
+  ]);
+    connection.end();
+});
+}
