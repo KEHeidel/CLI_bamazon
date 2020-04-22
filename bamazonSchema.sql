@@ -25,4 +25,19 @@ INSERT INTO products (product_name, department_name, price, stock_quantity)
 VALUE ("Instant Pot", "Kitchen", 300.93, 85);
 
 INSERT INTO products (product_name, department_name, price, stock_quantity)
-VALUE ("Paper Shreader", "Office", 45.50, 250);
+VALUE ("Paper Shredder", "Office", 45.50, 250);
+
+INSERT INTO products (product_name, department_name, price, stock_quantity)
+VALUE ("Violin", "Music", 210.99, 135);
+
+INSERT INTO products (product_name, department_name, price, stock_quantity)
+VALUE ("iRobot Roomba", "Appliances", 299.99, 160);
+
+INSERT INTO products (product_name, department_name, price, stock_quantity)
+VALUE ("Nylabone", "Pets", 3.99, 500);
+
+INSERT INTO products (product_name, department_name, price, stock_quantity)
+VALUE ("The Witcher 3: Wild Hunt", "Video Games", 50.99, 120);
+
+INSERT INTO products (product_name, department_name, price, stock_quantity)
+VALUE ("Nutribullet", "Kitchen", 49.95, 220);
