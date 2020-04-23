@@ -62,7 +62,40 @@ function makePurchase() {
       type: "input",
       message: "How many items would you like to purchase?"
     }
-  ]);
-    connection.end();
+  ])
+  .then(function(answer) {
+    var chosenItem;
+    for (var i = 0; i < results.length; i++) {
+      if (results[i].item_id == answer.purchase) {
+        chosenItem = results[i];
+      }
+    }
+
+    if (chosenItem.stock_quantity > parseInt(answer.number)) {
+      var newQuantity = parseInt(chosenItem.stock_quantity - answer.number)
+      connection.query(
+        "UPDATE products SET ? WHERE ?",
+        [
+          {
+            stock_quantity: newQuantity
+          },
+          {
+            item_id: chosenItem.item_id
+          }
+        ],
+        function(error) {
+          if (error) throw err;
+          console.log("Total cost: ", chosenItem.price * answer.number);
+          connection.end();
+        }
+      );
+    }
+    else {
+      // bid wasn't high enough, so apologize and start over
+      console.log("Insufficient inventory");
+      showAllProducts();
+    }
+  })
+    // connection.end();
 });
 }
