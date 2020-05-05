@@ -28,39 +28,39 @@ This app shows a list of products and allows the user to select a product to pur
 
 - In the terminal the user will type "node bamazonCustomer.js".
 
-![terminalcommand](images/commandline.png)
+![terminalcommand](images/commandline.PNG)
 
 - This will pull up a table of the products listed for sale. The table will list the item ID, the product name, the department, price per unit, and the total number in stock.
 
-![producttable](images/producttable.png)
+![producttable](images/producttable.PNG)
 
 - A prompt will then appear asking the user which product they would like to purchase.
 
-![itempurchaseblank](images/itempurchaseblank.png)
+![itempurchaseblank](images/itempurchaseblank.PNG)
 
 - The user can then input the item ID of the item they would like.
 
-![itempurchaseselected](images/itempurchaseselected.png)
+![itempurchaseselected](images/itempurchaseselected.PNG)
 
 - A prompt will then appear asking the user how many of that product they would like to purchase.
 
-![numberpurchaseblank](images/numberpurchaseblank.png)
+![numberpurchaseblank](images/numberpurchaseblank.PNG)
 
 - The user can then input the number of items they would like to purchase.
 
-![numberpurchaseselected](images/numberpurchaseselected.png)
+![numberpurchaseselected](images/numberpurchaseselected.PNG)
 
 - The total price of the purchase will then be shown to the user.
 
-![totalpurchaseprice](images/totalpurchaseprice.png)
+![totalpurchaseprice](images/totalpurchaseprice.PNG)
 
 - The products table will then be updated showing the new stock quantity for the product purchased.
 
-![updatedproducttable](images/updatedproducttable.png)
+![updatedproducttable](images/updatedproducttable.PNG)
 
 - The prompt will then reappear asking the user which item they would like to purchase. The user can then select another item or they can type exit to end the program.
 
-![endprogram](images/endprogram.png)
+![endprogram](images/endprogram.PNG)
 
 ---
 
