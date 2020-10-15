@@ -60,9 +60,9 @@ const showAllProd = () => {
     const sqlQuery = "SELECT * FROM products";
     connection.query(sqlQuery, function (err, res) {
         if (err) throw err;
-        const greeting = `\n Here are the current products for sale today.\n`;
+        var greeting = `\n Here are the current products for sale today.\n`;
         console.log(greeting);
-        const table = new Table({
+        var table = new Table({
             head: ['Item ID', 'Product', 'Department', 'Price', 'Number In Stock']
         });
         for (let i = 0; i < res.length; i++) {
@@ -75,6 +75,17 @@ const showAllProd = () => {
             ]);
         }
         console.log(table.toString() + "\n");
+        optionMenu();
+    });
+};
+
+const showLowInv = () => {
+    const lowInvQuery = "SELECT * FROM products WHERE stock_quantity <= 5";
+    connection.query(lowInvQuery, function (err, res) {
+        if (err) throw err;
+        const greeting = `\n Here are the current products with a low inventory.\n`;
+        console.log(greeting);
+        console.table(res);
         optionMenu();
     });
 };
