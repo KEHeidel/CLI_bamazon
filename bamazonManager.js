@@ -21,10 +21,10 @@ var connection = mysql.createConnection({
 
   connection.connect(function(err) {
       if (err) throw err;
-      optionMenu();
+      managerOptionMenu();
   });
 
-const optionMenu = () => {
+const managerOptionMenu = () => {
     console.log("Welcome to Bamazon Manger Portal.")
     inquirer
     .prompt({
@@ -75,7 +75,7 @@ const showAllProd = () => {
             ]);
         }
         console.log(table.toString() + "\n");
-        optionMenu();
+        managerOptionMenu();
     });
 };
 
@@ -86,6 +86,27 @@ const showLowInv = () => {
         const greeting = `\n Here are the current products with a low inventory.\n`;
         console.log(greeting);
         console.table(res);
-        optionMenu();
+        managerOptionMenu();
     });
 };
+
+const addInv = (inventory) => {
+    console.table(inventory);
+    inquirer
+    .prompt([
+        {
+            type: "input",
+            message: `\n Please enter the ID of the item you would like to add to.`,
+            name: "choice",
+            validate: function(val) {
+                if (isNaN(val) === false) {
+                    return true;
+                }
+                return false;
+            }
+        }
+    ])
+    .then(function(val) {
+        
+    })
+}
