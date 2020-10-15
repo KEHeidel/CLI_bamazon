@@ -21,7 +21,37 @@ var connection = mysql.createConnection({
 
   connection.connect(function(err) {
       if (err) throw err;
-      showAllProducts();
+      optionMenu();
   });
 
-  
+const optionMenu = () => {
+    console.log("Welcome to Bamazon Manger Portal.")
+    inquirer
+    .prompt({
+        type: "list",
+        message: "What would you like to do?",
+        name: "choice",
+        choices: ["View Products for Sale", "View Low Inventory", "Add to Inventory", "Add New Product", "Exit"],
+    })
+    .then(function (response) {
+        switch(response.choice) {
+            case "View Products for Sale":
+                showAllProd();
+                break;
+            case "View Low Inventory":
+                showLowInv();
+                break;
+            case "Add Inventory":
+                addInv();
+                break;
+            case "Add New Product":
+                addNew();
+                break;
+            case "Exit":
+                connection.end();
+                console.log ("You have exited the program.");
+                break;
+
+        }
+    });
+};
