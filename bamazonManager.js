@@ -55,3 +55,26 @@ const optionMenu = () => {
         }
     });
 };
+
+const showAllProd = () => {
+    const sqlQuery = "SELECT * FROM products";
+    connection.query(sqlQuery, function (err, res) {
+        if (err) throw err;
+        const greeting = `\n Here are the current products for sale today.\n`;
+        console.log(greeting);
+        const table = new Table({
+            head: ['Item ID', 'Product', 'Department', 'Price', 'Number In Stock']
+        });
+        for (let i = 0; i < res.length; i++) {
+            table.push([
+                res[i].item_id,
+                res[i].product_name,
+                res[i].department_name,
+                res[i].price,
+                res[i].stock_quantity,
+            ]);
+        }
+        console.log(table.toString() + "\n");
+        optionMenu();
+    });
+};
