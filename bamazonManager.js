@@ -24,6 +24,7 @@ var connection = mysql.createConnection({
       managerOptionMenu();
   });
 
+//   menu options for the manager
 const managerOptionMenu = () => {
     console.log("Welcome to Bamazon Manger Portal.")
     inquirer
@@ -56,6 +57,7 @@ const managerOptionMenu = () => {
     });
 };
 
+// shows all the products in the inventory
 const showAllProd = () => {
     const sqlQuery = "SELECT * FROM products";
     connection.query(sqlQuery, function (err, res) {
@@ -79,6 +81,7 @@ const showAllProd = () => {
     });
 };
 
+// shows the items that have an inventory of 5 or lower
 const showLowInv = () => {
     const lowInvQuery = "SELECT * FROM products WHERE stock_quantity <= 5";
     connection.query(lowInvQuery, function (err, res) {
@@ -90,11 +93,13 @@ const showLowInv = () => {
     });
 };
 
+// function to add inventory to the database
 const addInv = (inventory) => {
     console.table(inventory);
     inquirer
     .prompt([
         {
+            // prompt to ask manager for the id of the item they are wanting to add
             type: "input",
             message: `\n Please enter the ID of the item you would like to add to.`,
             name: "choice",
@@ -107,6 +112,31 @@ const addInv = (inventory) => {
         }
     ])
     .then(function(val) {
-        
-    })
-}
+        // if an item can be found with chosen id
+        let choiceId = parseInt(val.choice);
+        let product = checkInventory(choiceId, inventory);
+
+        if (product) {
+            // pass chosen id to promptManagerForQuantity
+            promptManagerForQuantity(product);
+        }
+        else {
+            // otherwise let manager know the item is not in the inventory and return to main menu
+            console.log(`\n That item is not in the inventory.`);
+            managerOptionMenu();
+        }
+    });
+};
+
+// check to see if the manager choice is in the inventory
+const checkInventory = (choiceId, inventory) => {
+    for (var i = 0; i < inventory.length; i++) {
+        if (inventory[i].item_id === choiceId) {
+            // if product is a match, return that product
+            return inventory[i];
+        }
+    }
+    // otherwise return null
+    return null;
+};
+
