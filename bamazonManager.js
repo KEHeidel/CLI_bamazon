@@ -106,20 +106,21 @@ const addInv = () => {
   const sqlQuery = "SELECT * FROM products";
   connection.query(sqlQuery, function (err, res) {
     if (err) throw err;
-    var inventory = new Table({
-        head: ["Item ID", "Product", "Department", "Price", "Number In Stock"],
-      });
-      for (let i = 0; i < res.length; i++) {
-        inventory.push([
-          res[i].item_id,
-          res[i].product_name,
-          res[i].department_name,
-          res[i].price,
-          res[i].stock_quantity,
-        ]);
-      }
+    var allProducts = new Table({
+      head: ["Item ID", "Product", "Department", "Price", "Number In Stock"],
+    });
+    for (let i = 0; i < res.length; i++) {
+      allProducts.push([
+        res[i].item_id,
+        res[i].product_name,
+        res[i].department_name,
+        res[i].price,
+        res[i].stock_quantity,
+      ]);
+    }
+    var inventory = res;
     console.log("\n");
-    console.table(inventory.toString() + "\n");
+    console.table(allProducts.toString() + "\n");
     inquirer
       .prompt([
         {
@@ -142,6 +143,18 @@ const addInv = () => {
 
         if (product) {
           // pass chosen id to promptManagerForQuantity
+        //   console.table(product);
+          var selectedProduct = new Table({
+            head: ["Item ID", "Product", "Department", "Price", "Number In Stock"],
+          });
+              selectedProduct.push([
+              product.item_id,
+              product.product_name,
+              product.department_name,
+              product.price,
+              product.stock_quantity,
+            ]);
+            console.table(selectedProduct.toString() + "\n");
           promptManagerForQuantity(product);
         } else {
           // otherwise let manager know the item is not in the inventory and return to main menu
@@ -154,7 +167,7 @@ const addInv = () => {
 
 // check to see if the manager choice is in the inventory
 const checkInventory = (choiceId, inventory) => {
-  console.log(inventory);
+  //   console.log(inventory);
   for (var i = 0; i < inventory.length; i++) {
     if (inventory[i].item_id === choiceId) {
       // if product is a match, return that product
@@ -187,14 +200,21 @@ const promptManagerForQuantity = (product) => {
 // updates quantity of selected product
 const addQuantity = (product, quantity) => {
   connection.query(
-    "UPDATE products SET stock_quantity = ? WHERE item_id ?",
-    [product.stock_quantity + quantity, product.item_id],
-    function (err, res) {
-      // alerts the manager that the addition to the inventory was successful
-      console.log(
-        `\n Successfully added ${quantity} ${product.product_name}s! \n`
-      );
-      managerOptionMenu();
+    "UPDATE products SET ? WHERE ?",
+    [
+      {
+        stock_quantity: product.stock_quantity + quantity,
+      },
+      {
+        item_id: product.item_id,
+      },
+    ],
+    // lists the total price of the purchase
+    function (error) {
+      if (error) throw err;
+      console.log(`\n Successfully added ${quantity} ${product.product_name}s! \n`);
+
+      showAllProd();
     }
   );
 };
