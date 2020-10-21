@@ -52,7 +52,7 @@ const managerOptionMenu = () => {
           addInv();
           break;
         case "Add New Product":
-          addNew();
+          addNewProd();
           break;
         case "Exit":
           connection.end();
@@ -217,3 +217,71 @@ const addQuantity = (product, quantity) => {
     }
   );
 };
+
+const addNewProd = () => {
+    connection.query("SELECT * FROM products", function (err, results) {
+        if (err) throw err;
+        inquirer
+        .prompt([
+            {
+                type: "input",
+                name: "product_name",
+                message: "What is the name of the product being added?"
+            },
+            {
+                type: "list",
+                name: "department_name",
+                choices: function() {
+                    var deptArray= [];
+                    for (var i = 0; i < results.length; i++) {
+                        deptArray.push(results[i].department_name);
+                    }
+                    return deptArray;
+                },
+                message: "Which department does this product belong in?"
+            },
+            {
+                type: "input",
+                name: "price",
+                message: "How much does this product cost?",
+                validate: function (value) {
+                    if (value > 0 && isNaN(value) === false) {
+                        return true;
+                    }
+                        return false;
+                  },
+            },
+            {
+                type: "input",
+                name: "stock_quantity",
+                message: "How many of this product would you like to add?",
+                validate: function (value) {
+                    if (value > 0 && isNaN(value) === false) {
+                        return true;
+                    }
+                        return false;
+                },
+            }
+        ]).then(function(newItem) {
+            addItemToDb(newItem.product_name, newItem.department_name, parseFloat(newItem.price).toFixed(2), parseInt(newItem.stock_quantity));
+        });
+    });
+};
+
+function addItemToDb(item, department, price, quantity) {
+	// query for creating table row, set vals for each column equal to parameters
+	connection.query(
+		"INSERT INTO products SET ?", 
+		{
+			product_name: item,
+			department_name: department,
+			price: price,
+			stock_quantity: quantity
+		},
+		function(error, results) {
+			// throw error, else log product added and return to welcome screen
+			if (error) throw error;
+			console.log("\nNew product successfully added.\n");
+			showAllProd();
+	});
+}
