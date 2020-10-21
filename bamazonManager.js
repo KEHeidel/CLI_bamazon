@@ -65,6 +65,22 @@ const managerOptionMenu = () => {
     });
 };
 
+const tableInput = (res) => {
+  var table = new Table({
+    head: ["Item ID", "Product", "Department", "Price", "Number In Stock"],
+  });
+  for (let i = 0; i < res.length; i++) {
+    table.push([
+      res[i].item_id,
+      res[i].product_name,
+      res[i].department_name,
+      res[i].price,
+      res[i].stock_quantity,
+    ]);
+  }
+  console.log(table.toString() + "\n");
+};
+
 // shows all the products in the inventory
 const showAllProd = () => {
   const sqlQuery = "SELECT * FROM products";
@@ -72,19 +88,7 @@ const showAllProd = () => {
     if (err) throw err;
     var greeting = `\n Here are the current products for sale today.\n`;
     console.log(greeting);
-    var table = new Table({
-      head: ["Item ID", "Product", "Department", "Price", "Number In Stock"],
-    });
-    for (let i = 0; i < res.length; i++) {
-      table.push([
-        res[i].item_id,
-        res[i].product_name,
-        res[i].department_name,
-        res[i].price,
-        res[i].stock_quantity,
-      ]);
-    }
-    console.log(table.toString() + "\n");
+    tableInput(res);
     managerOptionMenu();
   });
 };
@@ -106,21 +110,8 @@ const addInv = () => {
   const sqlQuery = "SELECT * FROM products";
   connection.query(sqlQuery, function (err, res) {
     if (err) throw err;
-    var allProducts = new Table({
-      head: ["Item ID", "Product", "Department", "Price", "Number In Stock"],
-    });
-    for (let i = 0; i < res.length; i++) {
-      allProducts.push([
-        res[i].item_id,
-        res[i].product_name,
-        res[i].department_name,
-        res[i].price,
-        res[i].stock_quantity,
-      ]);
-    }
+    tableInput(res);
     var inventory = res;
-    console.log("\n");
-    console.table(allProducts.toString() + "\n");
     inquirer
       .prompt([
         {
@@ -143,18 +134,24 @@ const addInv = () => {
 
         if (product) {
           // pass chosen id to promptManagerForQuantity
-        //   console.table(product);
+          //   console.table(product);
           var selectedProduct = new Table({
-            head: ["Item ID", "Product", "Department", "Price", "Number In Stock"],
+            head: [
+              "Item ID",
+              "Product",
+              "Department",
+              "Price",
+              "Number In Stock",
+            ],
           });
-              selectedProduct.push([
-              product.item_id,
-              product.product_name,
-              product.department_name,
-              product.price,
-              product.stock_quantity,
-            ]);
-            console.table(selectedProduct.toString() + "\n");
+          selectedProduct.push([
+            product.item_id,
+            product.product_name,
+            product.department_name,
+            product.price,
+            product.stock_quantity,
+          ]);
+          console.table(selectedProduct.toString() + "\n");
           promptManagerForQuantity(product);
         } else {
           // otherwise let manager know the item is not in the inventory and return to main menu
@@ -211,8 +208,10 @@ const addQuantity = (product, quantity) => {
     ],
     // lists the total price of the purchase
     function (error) {
-      if (error) throw err;
-      console.log(`\n Successfully added ${quantity} ${product.product_name}s! \n`);
+      if (error) throw error;
+      console.log(
+        `\n Successfully added ${quantity} ${product.product_name}s! \n`
+      );
 
       showAllProd();
     }
